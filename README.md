@@ -41,19 +41,21 @@ MigSeq2は、高スループットシーケンシングデータを処理およ�
 
 ## 使用方法
 
+### Migseq_2_denovo.pyを使用したde novo分析
+
 基本的な使い方：
 ```bash
-python Migseq_2_denovo.py -i <input_directory> -o <output_directory> -f <forward_adapter> -r <reverse_adapter> [options]
+python Migseq_2_denovo.py -i <input_directory> -o <output_directory> [options]
 
-python Migseq_2_denovo.py -i raw -o output -f AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC -r AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT 
+# 例
+python Migseq_2_denovo.py -i raw -o output
 ```
 
-### Dockerを使用して分析フローを実行する
+### Migseq_2_mapping.pyを使用したゲノムマッピング
 
-Dockerを使用して分析フローを実行したい場合は、次のコマンドを使用できます：
-
+基本的な使い方：
 ```bash
-docker run --rm -v /path/to/your/data:/data migseq2 python Migseq_2_denovo.py -i /data/input_directory -o /data/output_directory -f <forward_adapter> -r <reverse_adapter> [options]
+docker run --rm -v /path/to/your/data:/data migseq2 python Migseq_2_denovo.py -i /data/input_directory -o /data/output_directory  [options]
 ```
 
 ここで、`/path/to/your/data`はローカルデータのパスで、`/data/input_directory`と`/data/output_directory`はコンテナ内の入力および出力ディレクトリです。
@@ -65,8 +67,6 @@ docker run --rm -v /path/to/your/data:/data migseq2 python Migseq_2_denovo.py -i
 | `-i, --indir` | 入力ディレクトリ、原始FASTQファイルを含む | 必須 |
 | `-o, --outdir` | 出力ディレクトリ | 必須 |
 | `-q, --quality` | 品質閾値 | 20 |
-| `-f, --fada` | 正方向アダプター配列 | 必須 |
-| `-r, --rada` | 逆方向アダプター配列 | 必須 |
 | `-F, --F_remove` | 正方向リードから削除する塩基数 | 0 |
 | `-R, --R_remove` | 逆方向リードから削除する塩基数 | 0 |
 | `-t, --threads` | スレッド数 | 1 |
