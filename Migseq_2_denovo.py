@@ -12,6 +12,9 @@ import gzip
 from Bio import SeqIO
 import shutil
 from concurrent.futures import ThreadPoolExecutor
+import time
+import cProfile
+import pstats
 
 
 class SampleCodeClass:
@@ -241,6 +244,22 @@ class SampleCodeClass:
         cmd = f"{self.path_to_IQtree} -s {phy_file} -m MFP+ASC -bb 1000 --alrt 1000 -nt AUTO -pre {outpre}"
         self.execute_cmd(cmd)
 
+    def profile_execution(self, func):
+        def wrapper(*args, **kwargs):
+            profiler = cProfile.Profile()
+            start_time = time.time()
+            result = profiler.runcall(func, *args, **kwargs)
+            end_time = time.time()
+            
+            stats = pstats.Stats(profiler)
+            stats.sort_stats('cumulative')
+            stats.print_stats()
+            
+            print(f"执行时间: {end_time - start_time:.2f} 秒")
+            return result
+        return wrapper
+
+    @profile_execution
     def run(self, popmap=None, from_fa=None):
         try:
             if from_fa is not None:
