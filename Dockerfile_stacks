@@ -1,0 +1,67 @@
+FROM ubuntu:22.04
+
+# 设置时区为东京
+RUN ln -sf /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+
+# 创建工作目录
+WORKDIR /home/app
+
+# 安装基础软件包
+RUN apt update -y && apt install -y \
+    python3 \
+    python-is-python3 \
+    python3-pip \
+    wget \
+    samtools \
+    bwa \
+    gzip \
+    zlib1g-dev \
+    build-essential \
+    libbz2-dev \
+    liblzma-dev \
+    tabix \
+    vim
+
+# 安装Python包
+RUN pip install --no-cache-dir \
+    pandas \
+    pysam \
+    biopython \
+    configparser
+
+# 安装Stacks
+WORKDIR /usr/local/src/
+RUN wget https://catchenlab.life.illinois.edu/stacks/source/stacks-2.64.tar.gz && \
+    tar xvf stacks-2.64.tar.gz && \
+    cd stacks-2.64 && \
+    ./configure && make && make install && \
+    cd .. && rm stacks-2.64.tar.gz
+
+# 安装fastp
+RUN wget http://opengene.org/fastp/fastp && \
+    chmod a+x fastp && \
+    mv fastp /usr/local/bin/
+
+# 安装IQ-TREE
+RUN wget https://github.com/iqtree/iqtree2/releases/download/v2.2.2.6/iqtree-2.2.2.6-Linux.tar.gz && \
+    tar xvf iqtree-2.2.2.6-Linux.tar.gz && \
+    rm iqtree-2.2.2.6-Linux.tar.gz && \
+    chmod +x iqtree-2.2.2.6-Linux/bin/*
+
+# 设置环境变量
+ENV PATH="/usr/local/src/iqtree-2.2.2.6-Linux/bin:${PATH}"
+
+# 复制Python脚本
+COPY *.py /home/app/
+
+# 设置工作目录权限
+RUN chmod -R 755 /home/app
+
+# 验证安装
+RUN fastp --version && \
+    iqtree2 --version && \
+    bwa || true && \
+    samtools --version
+
+# 设置默认工作目录
+WORKDIR /home/app
