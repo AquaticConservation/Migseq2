@@ -66,17 +66,18 @@ docker run --rm -v /path/to/your/data:/data migseq2 python Migseq_2_denovo.py -i
 |------|------|--------|
 | `-i, --indir` | 入力ディレクトリ、原始FASTQファイルを含む | 必須 |
 | `-o, --outdir` | 出力ディレクトリ | 必須 |
-| `-q, --quality` | 品質閾値 | 20 |
+| `-q, --quality` | 品質閾値 | 20 |(ここ30の方がいい）
 | `-F, --F_remove` | 正方向リードから削除する塩基数 | 0 |
 | `-R, --R_remove` | 逆方向リードから削除する塩基数 | 0 |
-| `-t, --threads` | スレッド数 | 1 |
-| `-l, --min_len` | 最小長さ閾値 | 30 |
+| `-t, --threads` | スレッド数 | 1 |(4くらいがいい）
+| `-l, --min_len` | 最小長さ閾値 | 30 |（MIGseqは80）
 | `-m, --min_cov` | 最小カバレッジ | 3 |
 | `-M, --max_dist` | 最大距離 | 2 |
-| `-N, --max_dist_secondary` | 二次リードの最大距離 | 4 |
-| `--r` | r値 | 0.8 |
+| `-N, --max_dist_secondary` | 二次リードの最大距離 | 4 |（-NはStacksのどこの部分のオプションか？）
+| `--r` | r値 | 0.8 |（0.1くらいが初心者は使いやすい）
 | `--pop_opts` | 集団オプション | '' |
-| `--from_fa` | FASTAファイルから開始（オプション） | None |
+| `--from_bam` | BAMファイルから解析を始めることができる（オプション） | None |
+| `--from_fa` | FASTAファイルから解析を始めることができる（オプション） | None |
 | `--popmap` | 集団マッピングファイル（オプション） | None |
 
 ## 出力
